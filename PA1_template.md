@@ -1,9 +1,4 @@
----
-title: "Reproducible Research: Peer Assessment 1"
-output: 
-  html_document:
-    keep_md: true
----
+# Reproducible Research: Peer Assessment 1
 
 
 ## Loading and preprocessing the data
@@ -12,7 +7,8 @@ Set the working directory to the correct folder.
 
 Read the Fitbit data into the "activityData" variable.
 
-```{r}
+
+```r
 setwd("C:/Users/Mothballs/datasciencecoursera")
 
 activityData <- read.csv("activity.csv")
@@ -28,7 +24,8 @@ Calculate mean and median values and assign them into the "meanSteps" and "media
 
 Load the Lattice plotting system and create a histogram for total steps per date.
 
-```{r}
+
+```r
 stepsDate <- aggregate(steps ~ date, activityData, sum)
 
 steps <- stepsDate[, 2]
@@ -38,15 +35,29 @@ meanSteps <- mean(steps, na.rm=TRUE)
 medianSteps <- median(steps, na.rm=TRUE)
 
 print(meanSteps)
+```
 
+```
+## [1] 10766.19
+```
+
+```r
 print(medianSteps)
+```
 
+```
+## [1] 10765
+```
+
+```r
 library("lattice")
 
 histogram(steps, 
           xlab="Interval", 
           ylab="Steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-2-1.png) 
 
 ## What is the average daily activity pattern?
 
@@ -58,7 +69,8 @@ Use maxStepRow to find the interval associated with that row containing the maxi
 
 Load ggplot2 plotting system into R and create a time series plot for mean steps per interval.
 
-```{r}
+
+```r
 meanStepsPerInterval <- aggregate(steps ~ interval, activityData, mean)
 
 maxStepRow <- which.max(meanStepsPerInterval$steps)
@@ -66,12 +78,19 @@ maxStepRow <- which.max(meanStepsPerInterval$steps)
 intervalMaximum <- meanStepsPerInterval[maxStepRow,1]
 
 print(intervalMaximum)
+```
 
+```
+## [1] 835
+```
+
+```r
 library("ggplot2")
 
 ggplot(meanStepsPerInterval, aes(interval, steps)) + geom_line() + xlab("Interval") + ylab("Steps")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png) 
 
 ## Imputing missing values
 
@@ -87,7 +106,8 @@ Calculate the mean and median of the filled data set into the variables "meanFil
 
 Create a histogram for filledSteps.
 
-```{r}
+
+```r
 noData <- sum(is.na(activityData))
 
 filledData <- activityData
@@ -103,13 +123,27 @@ meanFilledSteps <- mean(filledSteps, na.rm=TRUE)
 medianFilledSteps <- median(filledSteps, na.rm=TRUE)
 
 print(meanFilledSteps)
+```
 
+```
+## [1] 10766.19
+```
+
+```r
 print(medianFilledSteps)
+```
 
+```
+## [1] 10766.19
+```
+
+```r
 histogram(filledSteps, 
           xlab="Interval", 
           ylab="Steps")
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png) 
 
 ## Are there differences in activity patterns between weekdays and weekends?
 
@@ -119,7 +153,8 @@ Use sapply to apply the function and add a column containing the period of the w
 
 Plot steps by interval for both week periods.
 
-```{r}
+
+```r
 periodOfWeek <- function(date) {
     if (weekdays(as.Date(date)) %in% c("Saturday", "Sunday")) {
     
@@ -142,3 +177,5 @@ xyplot(steps ~ interval|periodOfWeek,
            ylab = "Number of steps",
            layout=c(1,2))
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png) 
